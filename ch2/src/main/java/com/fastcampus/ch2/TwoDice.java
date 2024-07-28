@@ -20,7 +20,7 @@ public class TwoDice {
         out.println("<head>");
         out.println("</head>");
         out.println("<body>");
-        out.println("<img src='/static/img/dice1.jpg'>");
+        out.println("<img src='/img/dice1.jpg'>");
         out.println("</body>");
         out.println("</html>");
     }
