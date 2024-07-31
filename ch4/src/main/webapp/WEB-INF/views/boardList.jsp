@@ -29,15 +29,27 @@
         </tr>
         <c:forEach var="board" items="${list}">
             <tr>
-                <th>${board.bno}</th>
-                <th>${board.title}</th>
-                <th>${board.writer}</th>
-                <th>${board.reg_date}</th>
-                <th>${board.view_cnt}</th>
+                <td>${board.bno}</td>
+                <td><a href="<c:url value='/board/read?bno=${board.bno}&page=${page}&pageSize=${pageSize}'/>">${board.title}</a></td>
+                <td>${board.writer}</td>
+                <td>${board.reg_date}</ th>
+                <td>${board.view_cnt}</td>
             </tr>
         </c:forEach>
-
     </table>
+    <br>
+    <div>
+        <c:if test="${ph.showPrev}">
+            <a href="<c:url value='/board/list?page=${ph.beginPage-1}&pageSize=${ph.pageSize}'/>">&lt</a>
+        </c:if>
+        <c:forEach var="i" begin="${ph.beginPage}" end="${ph.endPage}">
+            <a href="<c:url value='/board/list?page=${i}&pageSize=${ph.pageSize}'/>">${i}</a>
+        </c:forEach>
+        <c:if test="${ph.showNext}">
+            <a href="<c:url value='/board/list?page=${ph.endPage+1}&pageSize=${ph.pageSize}'/>">&gt</a>
+        </c:if>
+    </div>
+</div>
 </div>
 </body>
 </html>

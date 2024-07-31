@@ -18,17 +18,45 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
+    @GetMapping("/read")
+    public String read(Integer bno, Integer page, Integer pageSize, Model m){
+        try{
+            BoardDto boardDto = boardService.read(bno);
+//            m.addAttribute("board", boardDto); // 아래 문장과 동일
+            m.addAttribute(boardDto);
+            m.addAttribute("page", page);
+            m.addAttribute("pageSize", pageSize);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "board";
+    }
+
     @GetMapping("/list")
-    public String list(Integer page, Integer pageSize, Model m, HttpServletRequest request) throws Exception {
+    public String list(Integer page, Integer pageSize, Model m, HttpServletRequest request) {
         if(!loginCheck(request))
             return "redirect:/login/login?toURL="+request.getRequestURL();  // 로그인을 안했으면 로그인 화면으로 이동
-        Map map = new HashMap();
-        map.put("offset",(page-1)*pageSize);
-        map.put("pageSize", pageSize);
 
-        List<BoardDto> list = boardService.getPage(map);
-        m.addAttribute("list", list);
+        if(page==null) page=1;
+        if(pageSize==null) pageSize=10;
 
+        try{
+
+            int totalCnt = boardService.getCount();
+            PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
+
+            Map map = new HashMap();
+            map.put("offset",(page-1)*pageSize);
+            map.put("pageSize", pageSize);
+
+            List<BoardDto> list = boardService.getPage(map);
+            m.addAttribute("list", list);
+            m.addAttribute("ph", pageHandler);
+            m.addAttribute("page",page);
+            m.addAttribute("pageSize",pageSize);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return "boardList"; // 로그인을 한 상태이면, 게시판 화면으로 이동
     }
 
